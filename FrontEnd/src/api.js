@@ -1,7 +1,7 @@
 // The base URL for all API calls.
 // We make it an empty string ("") so that all calls are relative.
 // E.g., "/auth/signup" will go to "http://your-load-balancer.com/auth/signup"
-const API_BASE = "http://localhost:8080";
+const API_BASE = "";
 
 // Generic API call function
 async function callApi(method, url, data = null, isFile = false) {
