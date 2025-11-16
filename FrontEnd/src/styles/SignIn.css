@@ -1,0 +1,288 @@
+/* --------------------------------------------
+   FULL PAGE WRAPPER
+---------------------------------------------*/
+.auth-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    /*overflow: hidden;*/
+    background: #111;
+    font-family: "Inter", sans-serif;
+}
+
+/* --------------------------------------------
+   LEFT HALF – Background Image
+---------------------------------------------*/
+.auth-left {
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+
+    margin-right: -7%;
+    overflow: hidden;
+}
+
+
+.auth-left-overlay {
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+/* --------------------------------------------
+   RIGHT HALF – Diagonal Gradient Panel
+---------------------------------------------*/
+.auth-right {
+    width: 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(135deg, #ff6a00, #ff3c00);
+    clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%);
+
+    box-shadow: -6px 0 25px rgba(0, 0, 0, 0.25);
+    padding: 20px;
+    position: relative;
+    z-index: 5;
+}
+
+/* --------------------------------------------
+   Centering your existing popup
+---------------------------------------------*/
+#Container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#popup {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* --------------------------------------------
+   Popup Window (Glassmorphic look)
+---------------------------------------------*/
+#popupWindow {
+    width: 70%;
+    max-width: 420px;
+
+    background: rgba(30, 28, 28, 0.12);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    padding: 28px 32px;
+    border-radius: 14px;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    color: #000000;
+}
+
+/* --------------------------------------------
+   Form Inputs
+---------------------------------------------*/
+#popupWindow input {
+    width: 100%;
+    padding: 12px 10px;
+    margin: 10px 0 20px 0;
+
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgb(0, 0, 0);
+
+    color: #000000;
+    font-size: 15px;
+    outline: none;
+
+    transition: 0.25s ease;
+}
+
+#popupWindow input:focus {
+    border-bottom-color: #000000;
+}
+
+/* --------------------------------------------
+   Labels
+---------------------------------------------*/
+#popupWindow label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    opacity: 0.9;
+}
+
+/* --------------------------------------------
+   Social Icons Header
+---------------------------------------------*/
+#popupheader {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+#popupheader div {
+    font-size: 20px;
+    cursor: pointer;
+    color: #000000;
+    opacity: 0.8;
+    transition: 0.25s; /* this applies to all properties by default */
+}
+
+/* General hover for all divs */
+#popupheader div:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+/* Icon-specific hover colors */
+#popupheader .google:hover { color: #F6F3A9; }
+#popupheader .facebook:hover { color: #A5E3E0; }
+#popupheader .twitter:hover { color: #AEC6CF; }
+#popupheader .linkedin:hover { color: #6ECDDB; }
+#popupheader .apple:hover { color: #CFCFC4; }
+
+/* --------------------------------------------
+   Divider ("Or")
+---------------------------------------------*/
+#popupcontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 12px 0 20px 0;
+}
+
+.popupdivider {
+    flex: 1;
+    height: 1px;
+    background: rgb(0, 0, 0);
+}
+
+#popupdivider2 {
+    padding: 0 10px;
+    font-size: 14px;
+    color: #000000;
+    opacity: 0.8;
+}
+
+/* --------------------------------------------
+   Buttons
+---------------------------------------------*/
+.signinbutton {
+    width: 100%;
+    padding: 12px;
+    background: #000000;
+    color: #ff3c00;
+    border: none;
+    border-radius: 25px;
+    font-size: 15px;
+    cursor: pointer;
+
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.signinbutton:hover {
+    background: #2e2e2e;
+}
+
+/* Guest button */
+.guestbutton {
+    display: block;          /* makes margin auto work */
+    margin: 12px auto 0;     /* top 12px, auto left/right */
+    padding: 10px 14px;
+    background: #000000;
+    color: #e64a19;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.guestbutton:hover {
+    background: #3e3e3e;
+}
+
+/* --------------------------------------------
+   Small Text Links (Sign Up / Sign In switch)
+---------------------------------------------*/
+.div2 label {
+    color: #000000;
+    cursor: pointer;
+    margin-left: 5px;
+    text-decoration: underline;
+    opacity: 0.9;
+}
+
+.div2 {
+    text-align: center;
+    margin-top: 12px;
+}
+
+/* --------------------------------------------
+   Guest Confirmation Overlay
+---------------------------------------------*/
+.confirm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999; /* <- ensure it's on top of everything */
+}
+
+.confirm-box {
+    position: relative;
+    z-index: 10000;
+    background: #000000;
+    padding: 25px;
+    border-radius: 10px;
+    width: 280px;
+    text-align: center;
+    color: #ffb700;
+}
+
+.confirm-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.confirm-buttons button {
+    padding: 8px 12px;
+    border: none;
+    background: #787878;
+    color: #ffb700;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.confirm-buttons button:hover {
+    background: #bcbcbc;
+}
+
+/* --------------------------------------------
+   Responsive
+---------------------------------------------*/
+@media (max-width: 900px) {
+    .auth-right {
+        width: 100%;
+        clip-path: none;
+    }
+
+    .auth-left {
+        display: none;
+    }
+
+    #popupWindow {
+        width: 85%;
+    }
+}
