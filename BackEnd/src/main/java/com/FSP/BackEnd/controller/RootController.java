@@ -9,7 +9,12 @@ public class RootController {
 
     @GetMapping("/")
     public ResponseEntity<String> healthCheck() {
-        // Simple response for ELB health checks
-        return ResponseEntity.ok("Backend is alive");
+        try {
+            long count = fileRepository.count(); // simple DB query
+            return ResponseEntity.ok("Backend ready. Files: " + count);
+        } catch (Exception e) {
+            return ResponseEntity.status(503).body("DB not ready");
+        }
     }
+
 }
