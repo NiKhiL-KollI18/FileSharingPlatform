@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import '../styles/SignIn.css';
 import { signup, login } from '../api';
 import userBack1 from '../assets/bg1.jpg';
 
 const SignIn = ({ onSignIn }) => {
     const [showConfirmGuest, setShowConfirmGuest] = useState(false);
-    const [showPopup, setShowPopup] = useState('signin'); // 'signin' or 'signup'
+    const [showPopup, setShowPopup] = useState('signin');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -22,8 +23,11 @@ const SignIn = ({ onSignIn }) => {
         }
         try {
             const response = await login({ email, password });
-            if (response?.status === 'success') {
-                onSignIn({ email });
+
+            // CHECK FOR SUCCESS AND TOKEN
+            if (response?.status === 'success' && response?.token) {
+                // Pass both the email AND the token up to App.jsx
+                onSignIn({ email }, response.token);
                 navigate('/dashboard');
             } else {
                 alert(response?.message || 'Signin failed!');
@@ -44,7 +48,7 @@ const SignIn = ({ onSignIn }) => {
             return;
         }
         try {
-            const response = await signup({ username, email, password });
+            const response = await signup({ name: username, email, password }); // Changed 'username' to 'name' to match UserEntity
             if (response?.status === 'success') {
                 alert('Registration successful! Please log in.');
                 setShowPopup('signin');
@@ -59,21 +63,13 @@ const SignIn = ({ onSignIn }) => {
     return (
         <>
             <div className="auth-wrapper">
-
-                {/* LEFT SIDE IMAGE */}
                 <div className="auth-left" style={{ backgroundImage: `url(${userBack1})` }}>
                     <div className="auth-left-overlay"></div>
                 </div>
-
-                {/* RIGHT GRADIENT SECTION */}
                 <div className="auth-right">
-
-                    {/* POPUP CONTAINER */}
                     <div id="Container">
                         <div id="popup" className="show">
                             <div id="popupWindow">
-
-                                {/* Header Social Icons */}
                                 <div id="popupheader">
                                     <div className="google"><i className="fa-brands fa-google"></i></div>
                                     <div className="facebook"><i className="fa-brands fa-facebook"></i></div>
@@ -81,15 +77,12 @@ const SignIn = ({ onSignIn }) => {
                                     <div className="linkedin"><i className="fa-brands fa-linkedin"></i></div>
                                     <div className="apple"><i className="fa-brands fa-apple"></i></div>
                                 </div>
-
-                                {/* Divider */}
                                 <div id="popupcontainer">
                                     <div className="popupdivider"></div>
                                     <div id="popupdivider2">Or</div>
                                     <div className="popupdivider"></div>
                                 </div>
 
-                                {/* Sign In Form */}
                                 {showPopup === 'signin' && (
                                     <div id="signin">
                                         <label className="emaillable">Email</label>
@@ -98,7 +91,7 @@ const SignIn = ({ onSignIn }) => {
                                         <input type="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} />
                                         <button className="signinbutton" onClick={handleSignIn}>Sign In</button>
                                         <div className="div2">
-                                            Don't have an account? <label onClick={() => setShowPopup('signup')}>Sign Up Now</label>
+                                            Don&apos;t have an account? <label onClick={() => setShowPopup('signup')}>Sign Up Now</label>
                                         </div>
                                         <div className="div4">
                                             <button className="guestbutton" onClick={() => setShowConfirmGuest(true)}>
@@ -108,7 +101,6 @@ const SignIn = ({ onSignIn }) => {
                                     </div>
                                 )}
 
-                                {/* Sign Up Form */}
                                 {showPopup === 'signup' && (
                                     <div id="signup">
                                         <label className="usernamelable">User Name</label>
@@ -125,27 +117,18 @@ const SignIn = ({ onSignIn }) => {
                                         </div>
                                     </div>
                                 )}
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Guest Confirmation Overlay (outside auth-wrapper) */}
             {showConfirmGuest && (
                 <div className="confirm-overlay">
                     <div className="confirm-box">
-                        <p>Are you sure you want to continue as a Guest?</p>
+                        <p>Guest mode is read-only. Continue?</p>
                         <div className="confirm-buttons">
-                            <button
-                                onClick={() => {
-                                    onSignIn({ username: 'Guest' });
-                                    navigate('/dashboard');
-                                }}
-                            >
-                                Yes, Continue
-                            </button>
+                            <button onClick={() => { onSignIn({ username: 'Guest' }, null); navigate('/dashboard'); }}>Yes</button>
                             <button onClick={() => setShowConfirmGuest(false)}>Cancel</button>
                         </div>
                     </div>
@@ -153,6 +136,10 @@ const SignIn = ({ onSignIn }) => {
             )}
         </>
     );
+};
+
+SignIn.propTypes = {
+    onSignIn: PropTypes.func.isRequired,
 };
 
 export default SignIn;

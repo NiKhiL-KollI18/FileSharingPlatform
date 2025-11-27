@@ -14,18 +14,4 @@ public class BackEndApplication {
     }
 
     // ✅ Enable CORS globally
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") 
-                        // CRITICAL FIX: Allow all origins (*) since the ALB is the front-end. 
-                        // The old 'localhost' setting caused startup delay/failure in the cloud.
-                        .allowedOrigins("*") 
-                        .allowedMethods("*")
-                        .allowedHeaders("*");
-            }
-        };
-    }
 }

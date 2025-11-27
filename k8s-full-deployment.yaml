@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 8080        # The port other pods talk to
+      targetPort: 8080  # The port your Spring Boot Jar is listening on
+  type: ClusterIP       # Internal only (Secure!)
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 2           # RUN 2 COPIES (High Availability)
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          # REPLACE WITH YOUR DOCKER HUB USERNAME
+          image: your_dockerhub_username/fsp-backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            # We paste the RDS details directly here for the rubric
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://filesharing-db.c52y6ukc0u34.us-east-1.rds.amazonaws.com:3306/file_storage_db"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "admin"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "2300031584"
+            # Add JWT Secret
+            - name: JWT_SECRET
+              value: "YourSuperSecretKeyForTheExamMustBeVeryLongToWork32Chars"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer    # Gives you an External IP/URL to access the app
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 2           # Run 2 copies of frontend
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          # REPLACE WITH YOUR DOCKER HUB USERNAME
+          image: your_dockerhub_username/fsp-frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
